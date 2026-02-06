@@ -49,7 +49,6 @@ You are a code review sub-agent. Your job is to run a Codex review and return a 
    codex exec \
      -m gpt-5.3-codex \
      -s read-only \
-     --full-auto \
      -c model_reasoning_effort="[EFFORT_LEVEL]" \
      -C "$(pwd)" \
      --output-last-message /tmp/codex-review-output.md \

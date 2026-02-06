@@ -102,7 +102,6 @@ PROMPT_EOF
 codex exec \
   -m gpt-5.3-codex \
   -s read-only \
-  --full-auto \
   -c model_reasoning_effort="high" \
   -C "$(pwd)" \
   --output-last-message /tmp/codex-review-output.md \
@@ -114,8 +113,7 @@ rm "$PROMPT_FILE"
 
 **Command flags explained:**
 - `-m gpt-5.3-codex`: Use the Codex 5.3 model
-- `-s read-only`: Sandbox mode - Codex can read files but cannot modify anything
-- `--full-auto`: Automatic execution without approval prompts
+- `-s read-only`: Sandbox mode - Codex can read files but cannot modify anything (do NOT use `--full-auto` as it overrides this to `workspace-write`)
 - `-c model_reasoning_effort="high"`: Reasoning effort level (use "xhigh" for complex reviews)
 - `-C "$(pwd)"`: Set working directory to current project
 - `--output-last-message`: Capture Codex's final response to a file
@@ -147,7 +145,7 @@ After Codex completes:
 1. Run `git diff HEAD` to get all changes
 2. Ask for any additional context if needed
 3. Construct review prompt with the auth feature context
-4. Run `codex exec -m gpt-5.3-codex -s read-only --full-auto -c model_reasoning_effort="high" ...`
+4. Run `codex exec -m gpt-5.3-codex -s read-only -c model_reasoning_effort="high" ...`
 5. Present Codex's review feedback
 6. Offer to help implement suggested changes
 
