@@ -18,12 +18,12 @@ Codex supports different reasoning effort levels. Choose based on complexity:
 
 | Level | When to Use | Trigger Phrases |
 |-------|-------------|-----------------|
-| **medium** (default) | Most reviews - straightforward features, bug fixes, small changes | "review with codex", "codex review" |
-| **high** | Complex implementations, security-sensitive code, architectural changes | "codex high review", "use codex high", "thorough codex review" |
+| **high** (default) | Most reviews - features, bug fixes, standard changes | "review with codex", "codex review" |
+| **extra_high** | Complex implementations, security-sensitive code, architectural changes | "codex extra high review", "use codex extra high", "thorough codex review", "deep codex review" |
 
 **How to set reasoning effort:**
-- Add `-c model_reasoning_effort="medium"` or `-c model_reasoning_effort="high"` to the codex command
-- Default to **medium** unless user explicitly requests high or the changes are complex/security-critical
+- Add `-c model_reasoning_effort="high"` or `-c model_reasoning_effort="extra_high"` to the codex command
+- Default to **high** unless user explicitly requests extra high or the changes are complex/security-critical
 
 ## Prerequisites
 
@@ -98,11 +98,12 @@ cat > "$PROMPT_FILE" << 'PROMPT_EOF'
 PROMPT_EOF
 
 # Run Codex in read-only, non-interactive mode
-# Use REASONING_EFFORT="medium" by default, or "high" if user requested
+# Use REASONING_EFFORT="high" by default, or "extra_high" if user requested
 codex exec \
+  -m codex-5.3 \
   -s read-only \
   --full-auto \
-  -c model_reasoning_effort="medium" \
+  -c model_reasoning_effort="high" \
   -C "$(pwd)" \
   --output-last-message /tmp/codex-review-output.md \
   "$(cat "$PROMPT_FILE")"
@@ -112,9 +113,10 @@ rm "$PROMPT_FILE"
 ```
 
 **Command flags explained:**
+- `-m codex-5.3`: Use the Codex 5.3 model
 - `-s read-only`: Sandbox mode - Codex can read files but cannot modify anything
 - `--full-auto`: Automatic execution without approval prompts
-- `-c model_reasoning_effort="medium"`: Reasoning effort level (use "high" for complex reviews)
+- `-c model_reasoning_effort="high"`: Reasoning effort level (use "extra_high" for complex reviews)
 - `-C "$(pwd)"`: Set working directory to current project
 - `--output-last-message`: Capture Codex's final response to a file
 
@@ -138,23 +140,23 @@ After Codex completes:
 
 ## Example Usage
 
-### Standard Review (medium effort)
+### Standard Review (high effort)
 **User says:** "I just finished implementing the user authentication feature, can you have codex review it?"
 
 **Claude Code will:**
 1. Run `git diff HEAD` to get all changes
 2. Ask for any additional context if needed
 3. Construct review prompt with the auth feature context
-4. Run `codex exec -s read-only --full-auto -c model_reasoning_effort="medium" ...`
+4. Run `codex exec -m codex-5.3 -s read-only --full-auto -c model_reasoning_effort="high" ...`
 5. Present Codex's review feedback
 6. Offer to help implement suggested changes
 
-### Thorough Review (high effort)
-**User says:** "use codex high to review this security implementation"
+### Thorough Review (extra_high effort)
+**User says:** "use codex extra high to review this security implementation"
 
 **Claude Code will:**
-1. Same steps as above, but use `-c model_reasoning_effort="high"` for deeper analysis
-2. High effort is better for: security-sensitive code, complex algorithms, architectural changes
+1. Same steps as above, but use `-c model_reasoning_effort="extra_high"` for deeper analysis
+2. Extra high effort is better for: security-sensitive code, complex algorithms, architectural changes
 
 ## Notes
 
