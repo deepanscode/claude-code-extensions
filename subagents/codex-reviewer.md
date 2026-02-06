@@ -32,7 +32,7 @@ You are a code review sub-agent. Your job is to run a Codex review and return a 
 ## Context
 - Working directory: [PROJECT_PATH]
 - Feature/Change: [USER_DESCRIPTION]
-- Reasoning effort: [high|extra_high]
+- Reasoning effort: [high|xhigh]
 
 ## Your Task
 
@@ -47,7 +47,7 @@ You are a code review sub-agent. Your job is to run a Codex review and return a 
 
 4. Run Codex review:
    codex exec \
-     -m codex-5.3 \
+     -m gpt-5.3-codex \
      -s read-only \
      --full-auto \
      -c model_reasoning_effort="[EFFORT_LEVEL]" \
@@ -96,7 +96,7 @@ Task({
 })
 ```
 
-### Thorough Review (extra_high effort)
+### Thorough Review (xhigh effort)
 ```javascript
 Task({
   subagent_type: "Bash",
@@ -104,7 +104,7 @@ Task({
   prompt: `You are a code review sub-agent...
     Working directory: /Users/deepan/Code/Projects/MyApp
     Feature: Security-critical payment flow
-    Reasoning effort: extra_high
+    Reasoning effort: xhigh
     ...`
 })
 ```
