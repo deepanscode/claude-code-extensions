@@ -1,0 +1,14 @@
+{
+  "name": "deepanscode",
+  "owner": {
+    "name": "deepanscode"
+  },
+  "plugins": [
+    {
+      "name": "codex-tools",
+      "source": ".",
+      "description": "Full dev lifecycle with OpenAI Codex CLI — plan, develop, test, debug, and review code using Codex agents",
+      "version": "1.0.0"
+    }
+  ]
+}

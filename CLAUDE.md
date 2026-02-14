@@ -1,25 +1,40 @@
 # Claude Code Extensions
 
-This repository contains custom extensions for Claude Code including skills, sub-agents, MCP servers, and hooks.
+A plugin for Claude Code providing skills and agents for the full development lifecycle using OpenAI's Codex CLI.
 
-## Directory Structure
+## Plugin Structure
 
-- `skills/` - Custom skills (slash commands) for Claude Code
-- `subagents/` - Custom sub-agent configurations
-- `mcp-servers/` - MCP server implementations for external API integrations (Atlassian, GitHub, etc.)
-- `hooks/` - Hook scripts that run on Claude Code events
+```
+.claude-plugin/          Plugin manifests
+skills/                  Slash command skills
+├── codex-plan/          Plan features and architecture
+├── codex-develop/       Build and implement features
+├── codex-test/          Write and run tests
+├── codex-debug/         Investigate and fix bugs
+└── codex-review/        Review code changes
+agents/                  Background sub-agents
+├── codex-planner/       Background planning agent
+├── codex-developer/     Background development agent
+├── codex-tester/        Background testing agent
+└── codex-reviewer/      Background review agent
+mcp-servers/             MCP server implementations
+hooks/                   Hook scripts for Claude Code events
+```
+
+## Installation
+
+```
+/plugin marketplace add deepanscode/claude-code-extensions
+/plugin install codex-tools@deepanscode
+```
 
 ## Conventions
 
 ### Git Tagging
 - Staging releases: `staging-vX.Y.Z`
 - Production releases: `prod-vX.Y.Z`
-- Version bumps follow semver:
-  - MAJOR: Breaking changes
-  - MINOR: New features (backward compatible)
-  - PATCH: Bug fixes
+- Version bumps follow semver (MAJOR.MINOR.PATCH)
 
 ### Development Guidelines
 - Do not commit unless explicitly requested
 - Never push without explicit permission
-- No Claude Code references in commit messages or code comments

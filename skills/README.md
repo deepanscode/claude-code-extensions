@@ -1,44 +1,42 @@
 # Skills
 
-Custom skills (slash commands) for Claude Code.
-
-## How Skills Work
-
-Skills are markdown files that provide instructions to Claude Code for handling specific tasks. They can be invoked either:
-
-1. **As slash commands**: `/codex-review`
-2. **Via natural language**: "review this with codex", "have codex check this code"
-
-## Installation
-
-Skills must be linked to Claude Code's commands directory (`~/.claude/commands/`):
-
-```bash
-# Create commands directory if it doesn't exist
-mkdir -p ~/.claude/commands
-
-# Symlink all skills
-ln -s /path/to/claude-code-extensions/skills/*.md ~/.claude/commands/
-```
-
-Or link individual skills:
-
-```bash
-ln -s /path/to/claude-code-extensions/skills/codex-review.md ~/.claude/commands/codex-review.md
-```
+Custom skills (slash commands) for Claude Code, powered by OpenAI's Codex CLI.
 
 ## Available Skills
 
 | Skill | Command | Description |
 |-------|---------|-------------|
-| codex-review | `/codex-review` | Get code changes reviewed by OpenAI's Codex CLI |
+| codex-plan | `/codex-plan` | Plan features and architecture using Codex |
+| codex-develop | `/codex-develop` | Build and implement features using Codex |
+| codex-test | `/codex-test` | Write and run tests using Codex |
+| codex-debug | `/codex-debug` | Investigate and fix bugs using Codex |
+| codex-review | `/codex-review` | Review code changes using Codex |
 
-## Creating New Skills
+## Structure
 
-1. Create a markdown file in this directory (e.g., `my-skill.md`)
-2. Include:
-   - Trigger phrases (when should this skill activate)
-   - Step-by-step instructions for Claude Code
-   - Example commands and expected behavior
-3. Symlink to `~/.claude/commands/`
-4. Restart Claude Code or start a new session
+Each skill is a directory containing a `SKILL.md` file:
+
+```
+skills/
+├── codex-plan/
+│   └── SKILL.md
+├── codex-develop/
+│   └── SKILL.md
+└── ...
+```
+
+## Prerequisites
+
+- Codex CLI installed (`codex` command available)
+- Codex authenticated (`codex login`)
+
+## Reasoning Effort Levels
+
+All skills support two effort levels:
+
+| Level | When to Use |
+|-------|-------------|
+| **high** (default) | Standard tasks |
+| **xhigh** | Complex, security-critical, or architectural work |
+
+Trigger with phrases like "codex extra high review" or "thorough codex plan".
