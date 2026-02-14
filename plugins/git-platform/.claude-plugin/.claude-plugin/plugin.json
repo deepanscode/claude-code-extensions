@@ -1,0 +1,9 @@
+{
+  "name": "git-platform",
+  "description": "Unified MCP server for GitHub, GitLab, and Bitbucket — PR management, pipelines, deployments, and repo operations across all three platforms",
+  "version": "0.1.0",
+  "author": {
+    "name": "deepanscode"
+  },
+  "keywords": ["mcp", "github", "gitlab", "bitbucket", "pull-requests", "pipelines", "git"]
+}

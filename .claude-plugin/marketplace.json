@@ -6,13 +6,13 @@
   "plugins": [
     {
       "name": "codex-tools",
-      "source": ".",
+      "source": "./plugins/codex-tools",
       "description": "Full dev lifecycle with OpenAI Codex CLI — plan, develop, test, debug, and review code using Codex agents",
       "version": "1.0.0"
     },
     {
       "name": "git-platform",
-      "source": "./mcp-servers/git-platform",
+      "source": "./plugins/git-platform",
       "description": "Unified MCP server for GitHub, GitLab, and Bitbucket — PRs, pipelines, deployments, and repo operations",
       "version": "0.1.0"
     }

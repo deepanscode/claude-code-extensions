@@ -1,29 +1,34 @@
 # Claude Code Extensions
 
-A plugin for Claude Code providing skills and agents for the full development lifecycle using OpenAI's Codex CLI.
+A plugin marketplace for Claude Code with Codex dev lifecycle tools and a unified Git platform MCP server.
 
 ## Plugin Structure
 
 ```
-.claude-plugin/          Plugin manifests
-skills/                  Slash command skills
-├── codex-plan/          Plan features and architecture
-├── codex-develop/       Build and implement features
-├── codex-test/          Write and run tests
-├── codex-debug/         Investigate and fix bugs
-└── codex-review/        Review code changes
-agents/                  Background sub-agents
-├── codex-planner/       Background planning agent
-├── codex-developer/     Background development agent
-├── codex-tester/        Background testing agent
-└── codex-reviewer/      Background review agent
-mcp-servers/             MCP server implementations
-hooks/                   Hook scripts for Claude Code events
+.claude-plugin/              Marketplace manifest
+plugins/
+├── codex-tools/             Codex CLI skills + agents
+│   ├── skills/
+│   │   ├── codex-plan/      Plan features and architecture
+│   │   ├── codex-develop/   Build and implement features
+│   │   ├── codex-test/      Write and run tests
+│   │   ├── codex-debug/     Investigate and fix bugs
+│   │   └── codex-review/    Review code changes
+│   └── agents/
+│       ├── codex-planner/   Background planning agent
+│       ├── codex-developer/ Background development agent
+│       ├── codex-tester/    Background testing agent
+│       └── codex-reviewer/  Background review agent
+└── git-platform/            Unified Git MCP server
+    ├── src/                 TypeScript source
+    ├── .mcp.json            MCP server config
+    └── .claude-plugin/      Plugin manifest
 ```
 
 ## Installation
 
 ```
+# Add the marketplace
 /plugin marketplace add deepanscode/claude-code-extensions
 
 # Install Codex skills + agents
@@ -43,3 +48,4 @@ hooks/                   Hook scripts for Claude Code events
 ### Development Guidelines
 - Do not commit unless explicitly requested
 - Never push without explicit permission
+- Always scan for credentials/secrets before pushing (repo is public)
