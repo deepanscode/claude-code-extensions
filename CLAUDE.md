@@ -25,7 +25,12 @@ hooks/                   Hook scripts for Claude Code events
 
 ```
 /plugin marketplace add deepanscode/claude-code-extensions
+
+# Install Codex skills + agents
 /plugin install codex-tools@deepanscode
+
+# Install Git Platform MCP server (GitHub/GitLab/Bitbucket)
+/plugin install git-platform@deepanscode
 ```
 
 ## Conventions
