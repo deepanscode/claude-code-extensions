@@ -2,7 +2,7 @@
   "mcpServers": {
     "git-platform": {
       "command": "node",
-      "args": ["mcp-servers/git-platform/dist/index.js"],
+      "args": ["dist/index.js"],
       "env": {
         "BITBUCKET_USERNAME": "",
         "BITBUCKET_TOKEN": ""
