@@ -1,8 +1,8 @@
 {
   "mcpServers": {
     "git-platform": {
-      "command": "node",
-      "args": ["dist/index.js"],
+      "command": "npx",
+      "args": ["tsx", "src/index.ts"],
       "env": {
         "BITBUCKET_USERNAME": "",
         "BITBUCKET_TOKEN": ""
