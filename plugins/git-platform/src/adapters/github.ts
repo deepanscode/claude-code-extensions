@@ -9,6 +9,8 @@ import type {
   PullRequestDetail,
   PullRequestMergeParams,
   PullRequestApproveParams,
+  PullRequestCommentParams,
+  PullRequestDeclineParams,
   Pipeline,
   PipelineListParams,
   PipelineTriggerParams,
@@ -159,6 +161,23 @@ export class GitHubAdapter extends PlatformAdapter {
 
     const output = await this.gh(args);
     return { approved: true, message: output || "Pull request approved" };
+  }
+
+  async prComment(params: PullRequestCommentParams): Promise<{ id: number; message: string }> {
+    await this.gh([
+      "pr", "comment", String(params.id),
+      "--repo", this.repoSlug,
+      "--body", params.body,
+    ]);
+    return { id: 0, message: "Comment added" };
+  }
+
+  async prDecline(params: PullRequestDeclineParams): Promise<{ declined: boolean; message: string }> {
+    await this.gh([
+      "pr", "close", String(params.id),
+      "--repo", this.repoSlug,
+    ]);
+    return { declined: true, message: "Pull request closed" };
   }
 
   async pipelineList(params: PipelineListParams): Promise<Pipeline[]> {

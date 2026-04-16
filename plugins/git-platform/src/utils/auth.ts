@@ -10,7 +10,9 @@ export function getBitbucketAuth(): BitbucketAuth {
   if (!username || !token) {
     throw new Error(
       "Bitbucket authentication requires BITBUCKET_USERNAME and BITBUCKET_TOKEN environment variables.\n" +
-      "Set them in your shell environment or in ~/.claude/.env"
+      "BITBUCKET_USERNAME accepts your Bitbucket username or Atlassian email.\n" +
+      "BITBUCKET_TOKEN is an API token from https://bitbucket.org/account/settings/api-tokens/\n" +
+      "(App passwords are deprecated; use API tokens instead.)"
     );
   }
 

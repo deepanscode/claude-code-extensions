@@ -179,6 +179,42 @@ server.tool(
   },
 );
 
+// --- pr_comment ---
+server.tool(
+  "pr_comment",
+  "Add a comment to a pull request / merge request",
+  {
+    id: z.number().describe("PR/MR number or ID"),
+    body: z.string().describe("Comment body (markdown supported)"),
+  },
+  async (params) => {
+    const adapter = await getAdapter();
+    const result = await adapter.prComment({
+      id: params.id,
+      body: params.body,
+    });
+    return {
+      content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }],
+    };
+  },
+);
+
+// --- pr_decline ---
+server.tool(
+  "pr_decline",
+  "Close / decline a pull request without merging",
+  {
+    id: z.number().describe("PR/MR number or ID"),
+  },
+  async (params) => {
+    const adapter = await getAdapter();
+    const result = await adapter.prDecline({ id: params.id });
+    return {
+      content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }],
+    };
+  },
+);
+
 // --- pipeline_list ---
 server.tool(
   "pipeline_list",

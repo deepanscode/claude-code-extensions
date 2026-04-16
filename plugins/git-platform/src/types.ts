@@ -66,6 +66,15 @@ export interface PullRequestApproveParams {
   comment?: string;
 }
 
+export interface PullRequestCommentParams {
+  id: number;
+  body: string;
+}
+
+export interface PullRequestDeclineParams {
+  id: number;
+}
+
 export interface Pipeline {
   id: number | string;
   status: "running" | "success" | "failed" | "pending" | "cancelled" | "waiting";

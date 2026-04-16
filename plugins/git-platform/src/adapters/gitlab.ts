@@ -9,6 +9,8 @@ import type {
   PullRequestDetail,
   PullRequestMergeParams,
   PullRequestApproveParams,
+  PullRequestCommentParams,
+  PullRequestDeclineParams,
   Pipeline,
   PipelineListParams,
   PipelineTriggerParams,
@@ -161,6 +163,23 @@ export class GitLabAdapter extends PlatformAdapter {
     }
 
     return { approved: true, message: output || "Merge request approved" };
+  }
+
+  async prComment(params: PullRequestCommentParams): Promise<{ id: number; message: string }> {
+    await this.glab([
+      "mr", "note", String(params.id),
+      "--repo", this.repoSlug,
+      "--message", params.body,
+    ]);
+    return { id: 0, message: "Comment added" };
+  }
+
+  async prDecline(params: PullRequestDeclineParams): Promise<{ declined: boolean; message: string }> {
+    await this.glab([
+      "mr", "close", String(params.id),
+      "--repo", this.repoSlug,
+    ]);
+    return { declined: true, message: "Merge request closed" };
   }
 
   async pipelineList(params: PipelineListParams): Promise<Pipeline[]> {

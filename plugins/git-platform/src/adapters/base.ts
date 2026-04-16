@@ -7,6 +7,8 @@ import type {
   PullRequestDetail,
   PullRequestMergeParams,
   PullRequestApproveParams,
+  PullRequestCommentParams,
+  PullRequestDeclineParams,
   Pipeline,
   PipelineListParams,
   PipelineTriggerParams,
@@ -27,6 +29,8 @@ export abstract class PlatformAdapter {
   abstract prView(params: PullRequestViewParams): Promise<PullRequestDetail>;
   abstract prMerge(params: PullRequestMergeParams): Promise<{ merged: boolean; message: string }>;
   abstract prApprove(params: PullRequestApproveParams): Promise<{ approved: boolean; message: string }>;
+  abstract prComment(params: PullRequestCommentParams): Promise<{ id: number; message: string }>;
+  abstract prDecline(params: PullRequestDeclineParams): Promise<{ declined: boolean; message: string }>;
 
   abstract pipelineList(params: PipelineListParams): Promise<Pipeline[]>;
   abstract pipelineTrigger(params: PipelineTriggerParams): Promise<Pipeline>;

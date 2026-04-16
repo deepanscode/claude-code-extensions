@@ -9,6 +9,8 @@ import type {
   PullRequestDetail,
   PullRequestMergeParams,
   PullRequestApproveParams,
+  PullRequestCommentParams,
+  PullRequestDeclineParams,
   Pipeline,
   PipelineListParams,
   PipelineTriggerParams,
@@ -171,6 +173,23 @@ export class BitbucketAdapter extends PlatformAdapter {
     }
 
     return { approved: true, message: "Pull request approved" };
+  }
+
+  async prComment(params: PullRequestCommentParams): Promise<{ id: number; message: string }> {
+    const data = await this.api<{ id: number }>(
+      `repositories/${this.repoSlug}/pullrequests/${params.id}/comments`,
+      "POST",
+      { content: { raw: params.body } },
+    );
+    return { id: data.id, message: "Comment added" };
+  }
+
+  async prDecline(params: PullRequestDeclineParams): Promise<{ declined: boolean; message: string }> {
+    await this.api(
+      `repositories/${this.repoSlug}/pullrequests/${params.id}/decline`,
+      "POST",
+    );
+    return { declined: true, message: "Pull request declined" };
   }
 
   async pipelineList(params: PipelineListParams): Promise<Pipeline[]> {
