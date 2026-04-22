@@ -1,0 +1,9 @@
+{
+  "name": "dev-workflow",
+  "description": "Universal development workflow — branch naming, commit format, migration safety, docs lifecycle (ADR/spec/guide/runbook), pre-PR review, and ticket-driven branch start. Framework-agnostic.",
+  "version": "0.1.0",
+  "author": {
+    "name": "deepanscode"
+  },
+  "keywords": ["workflow", "git", "adr", "specs", "runbook", "pr-review", "conventional-commits", "branch-naming"]
+}

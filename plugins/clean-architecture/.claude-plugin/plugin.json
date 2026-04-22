@@ -1,0 +1,9 @@
+{
+  "name": "clean-architecture",
+  "description": "Architectural skills for layered backend projects — Clean Architecture layering, cross-module contracts boundary, route-derived IDs, and soft-delete-by-default. Language-agnostic examples (.NET, TypeScript, Python, Go, Java).",
+  "version": "0.1.0",
+  "author": {
+    "name": "deepanscode"
+  },
+  "keywords": ["clean-architecture", "ddd", "modular-monolith", "bounded-context", "soft-delete", "rest-api"]
+}

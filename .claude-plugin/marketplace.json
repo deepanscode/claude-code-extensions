@@ -15,6 +15,18 @@
       "source": "./plugins/git-platform",
       "description": "Unified MCP server for GitHub, GitLab, and Bitbucket — PRs, pipelines, deployments, and repo operations",
       "version": "0.1.0"
+    },
+    {
+      "name": "dev-workflow",
+      "source": "./plugins/dev-workflow",
+      "description": "Universal dev workflow — branch naming, commit format, migration safety, docs lifecycle (ADR / spec / guide / runbook), pre-PR review, ticket-driven branch start",
+      "version": "0.1.0"
+    },
+    {
+      "name": "clean-architecture",
+      "source": "./plugins/clean-architecture",
+      "description": "Architectural skills for layered backends — Clean Architecture layering, modular-monolith contracts boundary, route-derived IDs, soft-delete-by-default",
+      "version": "0.1.0"
     }
   ]
 }

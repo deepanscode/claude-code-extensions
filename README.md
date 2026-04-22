@@ -1,6 +1,6 @@
 # Claude Code Extensions
 
-A plugin marketplace for [Claude Code](https://docs.anthropic.com/en/docs/claude-code) that adds OpenAI Codex-powered development tools and a unified Git platform MCP server.
+A plugin marketplace for [Claude Code](https://docs.anthropic.com/en/docs/claude-code) with Codex-powered dev tools, a unified Git platform MCP server, a framework-agnostic dev-workflow bundle, and a Clean-Architecture skill pack.
 
 ## Available Plugins
 
@@ -60,6 +60,53 @@ A TypeScript [MCP server](https://modelcontextprotocol.io/) that provides unifie
 - **GitLab**: Uses `glab` CLI (authenticate with `glab auth login`)
 - **Bitbucket**: Set `BITBUCKET_USERNAME` and `BITBUCKET_TOKEN` env vars
 
+---
+
+### dev-workflow `v0.1.0`
+
+Framework-agnostic development workflow bundle — branch naming, Conventional Commits, migration safety, the docs lifecycle (ADR / spec / guide / runbook), pre-PR review, and ticket-driven branch creation. Designed to be dropped into any project; per-project overrides (ticket-key regex, integration branch, docs folder) are picked up from the project's `CLAUDE.md` / `AGENTS.md`.
+
+**Skills** (auto-triggered):
+
+| Skill | Triggers on | Enforces |
+|---|---|---|
+| `branch-naming` | `git checkout -b`, branch creation / rename | `feature\|bugfix\|hotfix/<TICKET>`, `release/<version>`, branch-off / merge targets |
+| `commit-message-format` | `git commit`, amend, drafting commit messages | Conventional Commits + ticket key; no AI attribution |
+| `migration-safety` | Any DB migration tool (EF Core, Prisma, Alembic, Rails, Flyway, Liquibase, Knex, Sequelize, TypeORM, golang-migrate, …) | Generating OK; applying requires explicit in-conversation approval |
+
+**Commands** (on-demand):
+
+| Command | Description |
+|---|---|
+| `/adr-new <topic>` | Create a new Architecture Decision Record |
+| `/adr-supersede <NNNN>` | Replace an existing ADR with a new one |
+| `/spec-new <ticket-or-name>` | Create a new feature spec in `specs/active/` |
+| `/spec-archive <filename>` | Archive a shipped spec to `specs/archive/YYYY-Qn/` |
+| `/guide-new <topic>` | Create a new task-shaped developer guide |
+| `/runbook-new <symptom>` | Create a new operational runbook |
+| `/ticket-start <TICKET>` | Fetch the ticket and create the correctly-named branch |
+| `/review-pr` | Pre-PR review: architectural scan + parallel docs-sync + test-gap, consolidated by severity |
+
+**Agents** (background, delegated):
+
+| Agent | Description |
+|---|---|
+| `docs-sync` | Scans the branch diff and lists doc files that should have been updated but weren't |
+| `test-gap` | Scans the branch diff and lists new handlers / controllers / validators / domain methods without matching tests |
+
+---
+
+### clean-architecture `v0.1.0`
+
+Architectural skills for layered backend projects. Multi-language examples (.NET, TypeScript, Python, Go, Java). Opt in to just the ones that match your project.
+
+| Skill | Triggers on | Enforces |
+|---|---|---|
+| `clean-arch-boundaries` | Edits in `Domain`, `Application`, `Infrastructure`, `Contracts` (or equivalent) folders | Layering: deps point inward; domain has zero framework deps |
+| `modular-monolith-contracts` | Cross-module references or new public-surface types | Only public contracts cross module lines |
+| `route-derived-ids` | Controllers / route handlers with `{id}` in route + matching validator | Controller sets route IDs; body validators don't check them |
+| `soft-delete-required` | New entities / new tables / new migrations | Soft-delete base + query filter; junction tables exempt |
+
 ## Installation
 
 ### Quick start
@@ -71,6 +118,8 @@ A TypeScript [MCP server](https://modelcontextprotocol.io/) that provides unifie
 # 2. Install the plugins you want
 /plugin install codex-tools@deepanscode
 /plugin install git-platform@deepanscode
+/plugin install dev-workflow@deepanscode
+/plugin install clean-architecture@deepanscode
 ```
 
 ### Updating
@@ -85,6 +134,8 @@ A TypeScript [MCP server](https://modelcontextprotocol.io/) that provides unifie
 |--------|----------|
 | codex-tools | [Codex CLI](https://github.com/openai/codex) (`npm install -g @openai/codex`) |
 | git-platform | `gh` CLI (GitHub), `glab` CLI (GitLab), or Bitbucket env vars |
+| dev-workflow | A git repo. `/ticket-start` works best with the Atlassian / Linear / GitHub MCP integration available |
+| clean-architecture | Nothing — skills are pure markdown guidance |
 
 ## Repository Structure
 
@@ -126,6 +177,35 @@ plugins/
         exec.ts                  Child process wrapper
     package.json
     tsconfig.json
+
+  dev-workflow/                  Framework-agnostic workflow bundle
+    .claude-plugin/
+      plugin.json
+    skills/
+      branch-naming/SKILL.md
+      commit-message-format/SKILL.md
+      migration-safety/SKILL.md
+    commands/
+      adr-new.md
+      adr-supersede.md
+      spec-new.md
+      spec-archive.md
+      guide-new.md
+      runbook-new.md
+      ticket-start.md
+      review-pr.md
+    agents/
+      docs-sync.md
+      test-gap.md
+
+  clean-architecture/            Architectural skills for layered backends
+    .claude-plugin/
+      plugin.json
+    skills/
+      clean-arch-boundaries/SKILL.md
+      modular-monolith-contracts/SKILL.md
+      route-derived-ids/SKILL.md
+      soft-delete-required/SKILL.md
 ```
 
 ## How It Works
@@ -151,27 +231,41 @@ Claude Code orchestrates the pipeline, comparing plans, feeding results between 
 
 1. Fork the repo
 2. Create a feature branch
-3. Add your skill in `plugins/codex-tools/skills/your-skill/SKILL.md` or agent in `plugins/codex-tools/agents/your-agent/AGENT.md`
+3. Add your skill / command / agent under the relevant plugin folder (`plugins/<plugin>/skills/`, `plugins/<plugin>/commands/`, or `plugins/<plugin>/agents/`)
 4. Open a PR
+
+### Skills vs commands vs agents
+
+| Artifact | Invocation | Frontmatter | Good for |
+|---|---|---|---|
+| **Skill** (`skills/<name>/SKILL.md`) | Auto — based on its `description` trigger | `name`, `description` | Coding conventions Claude should apply as it edits |
+| **Slash command** (`commands/<name>.md`) | On demand — `/<name>` | `description`, `allowed-tools` | Workflow steps the human kicks off |
+| **Agent** (`agents/<name>.md`) | Delegated — via the `Agent` tool | `name`, `description`, `tools` | Focused analysis that would bloat the main context |
 
 ### Adding a new skill
 
-Create a directory under `plugins/codex-tools/skills/` with a `SKILL.md` file:
-
 ```
-plugins/codex-tools/skills/my-skill/
+plugins/<plugin>/skills/my-skill/
   SKILL.md
 ```
 
-The `SKILL.md` should include:
-- Trigger phrases (when should this skill activate)
-- Step-by-step execution instructions
-- Example usage
-- Error handling
+`SKILL.md` needs `---\nname: …\ndescription: …\n---` frontmatter where the description explains *when* the skill should fire (trigger conditions, file patterns) — Claude uses that text to decide relevance.
+
+### Adding a new command
+
+```
+plugins/<plugin>/commands/my-command.md
+```
+
+Frontmatter: `description` (shown in `/help`) and `allowed-tools` (comma-separated list that scopes what the command may use).
 
 ### Adding a new agent
 
-Create a directory under `plugins/codex-tools/agents/` with an `AGENT.md` file following the same pattern as existing agents. Include the Task tool prompt template and expected output format.
+```
+plugins/<plugin>/agents/my-agent.md
+```
+
+Frontmatter: `name`, `description` (one paragraph on *when* to delegate — the main agent reads this), and `tools` (minimal toolset). The body is the full system prompt the agent runs with.
 
 ## License
 
