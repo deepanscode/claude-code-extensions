@@ -32,7 +32,8 @@ You are a planning sub-agent. Your job is to run a Codex planning session and re
 ## Context
 - Working directory: [PROJECT_PATH]
 - Feature/Change: [USER_DESCRIPTION]
-- Reasoning effort: [high|xhigh]
+- Model: [MODEL]            # default: gpt-5.5
+- Reasoning effort: [low|medium|high|xhigh]   # default: medium
 
 ## Your Task
 
@@ -47,7 +48,7 @@ You are a planning sub-agent. Your job is to run a Codex planning session and re
 
 4. Run Codex planning:
    codex exec \
-     -m gpt-5.3-codex \
+     -m [MODEL] \
      -s read-only \
      -c model_reasoning_effort="[EFFORT_LEVEL]" \
      -C "$(pwd)" \
@@ -105,15 +106,16 @@ Do not include intermediate command output. Keep the plan focused and actionable
 
 ## Spawning Examples
 
-### Standard Planning (high effort)
+### Standard Planning (medium effort, default model)
 ```javascript
 Task({
   subagent_type: "Bash",
   description: "Codex implementation plan",
   prompt: `You are a planning sub-agent...
-    Working directory: /Users/deepan/Code/Projects/MyApp
+    Working directory: <PROJECT_PATH>
     Feature: Add client-side URL redirect resolver
-    Reasoning effort: high
+    Model: gpt-5.5
+    Reasoning effort: medium
     ...`
 })
 ```
@@ -124,12 +126,18 @@ Task({
   subagent_type: "Bash",
   description: "Codex architecture plan (thorough)",
   prompt: `You are a planning sub-agent...
-    Working directory: /Users/deepan/Code/Projects/MyApp
+    Working directory: <PROJECT_PATH>
     Feature: Migrate from REST to GraphQL
+    Model: gpt-5.5
     Reasoning effort: xhigh
     ...`
 })
 ```
+
+### Caller Overrides
+
+- **Model**: when the user names a different Codex model (e.g. "use gpt-5-codex"), pass that to `-m` instead of the default `gpt-5.5`.
+- **Effort**: pick `low`/`medium`/`high`/`xhigh` from the user's phrasing. Default to `medium` when unspecified.
 
 ## Benefits Over Inline Skill
 

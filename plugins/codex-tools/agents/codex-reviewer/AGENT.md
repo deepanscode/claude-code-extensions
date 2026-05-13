@@ -32,7 +32,8 @@ You are a code review sub-agent. Your job is to run a Codex review and return a 
 ## Context
 - Working directory: [PROJECT_PATH]
 - Feature/Change: [USER_DESCRIPTION]
-- Reasoning effort: [high|xhigh]
+- Model: [MODEL]            # default: gpt-5.5
+- Reasoning effort: [low|medium|high|xhigh]   # default: medium
 
 ## Your Task
 
@@ -47,7 +48,7 @@ You are a code review sub-agent. Your job is to run a Codex review and return a 
 
 4. Run Codex review:
    codex exec \
-     -m gpt-5.3-codex \
+     -m [MODEL] \
      -s read-only \
      -c model_reasoning_effort="[EFFORT_LEVEL]" \
      -C "$(pwd)" \
@@ -82,15 +83,30 @@ Do not include the full Codex output or any intermediate steps. Keep it brief.
 
 ## Spawning Examples
 
-### Standard Review (high effort)
+### Standard Review (medium effort, default model)
 ```javascript
 Task({
   subagent_type: "Bash",
   description: "Codex code review",
   prompt: `You are a code review sub-agent...
-    Working directory: /Users/deepan/Code/Projects/MyApp
+    Working directory: <PROJECT_PATH>
     Feature: Added user authentication
-    Reasoning effort: high
+    Model: gpt-5.5
+    Reasoning effort: medium
+    ...`
+})
+```
+
+### Quick Review (low effort)
+```javascript
+Task({
+  subagent_type: "Bash",
+  description: "Codex code review (quick)",
+  prompt: `You are a code review sub-agent...
+    Working directory: <PROJECT_PATH>
+    Feature: Rename-only refactor
+    Model: gpt-5.5
+    Reasoning effort: low
     ...`
 })
 ```
@@ -101,12 +117,18 @@ Task({
   subagent_type: "Bash",
   description: "Codex code review (thorough)",
   prompt: `You are a code review sub-agent...
-    Working directory: /Users/deepan/Code/Projects/MyApp
+    Working directory: <PROJECT_PATH>
     Feature: Security-critical payment flow
+    Model: gpt-5.5
     Reasoning effort: xhigh
     ...`
 })
 ```
+
+### Caller Overrides
+
+- **Model**: when the user names a different Codex model (e.g. "use gpt-5-codex"), pass that to `-m` instead of the default `gpt-5.5`.
+- **Effort**: pick `low`/`medium`/`high`/`xhigh` from the user's phrasing. Default to `medium` when unspecified.
 
 ## Benefits Over Inline Skill
 

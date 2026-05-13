@@ -33,7 +33,8 @@ You are a development sub-agent. Your job is to run Codex to build a feature and
 - Working directory: [PROJECT_PATH]
 - Feature: [FEATURE_DESCRIPTION]
 - Tech stack: [TECH_STACK]
-- Reasoning effort: [high|xhigh]
+- Model: [MODEL]            # default: gpt-5.5
+- Reasoning effort: [low|medium|high|xhigh]   # default: medium
 
 ## Your Task
 
@@ -42,7 +43,7 @@ You are a development sub-agent. Your job is to run Codex to build a feature and
 
 2. Run Codex development:
    codex exec \
-     -m gpt-5.3-codex \
+     -m [MODEL] \
      -s workspace-write \
      -c model_reasoning_effort="[EFFORT_LEVEL]" \
      -C "$(pwd)" \
@@ -85,6 +86,11 @@ Do not include intermediate steps. Keep it brief.
 | Interactivity | Can iterate immediately | Returns final summary only |
 | Background execution | No | Yes (can use run_in_background) |
 | Best for | Iterative development, discussions | Quick builds, clean context |
+
+## Caller Overrides
+
+- **Model**: when the user names a different Codex model (e.g. "use gpt-5-codex"), pass that to `-m` instead of the default `gpt-5.5`.
+- **Effort**: pick `low`/`medium`/`high`/`xhigh` from the user's phrasing. Default to `medium` when unspecified.
 
 ## Notes
 

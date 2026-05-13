@@ -21,12 +21,22 @@ This skill runs OpenAI's Codex CLI in non-interactive mode with workspace-write 
 | **Write Tests** (default) | `workspace-write` | User wants Codex to write test files |
 | **Write & Run** | `workspace-write` | User wants Codex to write tests AND run them |
 
-## Reasoning Effort Levels
+## Model & Reasoning Effort
+
+Both the model (`-m`) and reasoning effort (`-c model_reasoning_effort=...`) are caller-configurable. Defaults: **`gpt-5.5`** + **`medium`** effort. If the user explicitly names a different Codex model or effort level, pass it through instead.
+
+### Effort Levels
 
 | Level | When to Use | Trigger Phrases |
 |-------|-------------|-----------------|
-| **high** (default) | Most testing tasks - unit tests, integration tests | "test with codex", "codex test" |
-| **xhigh** | Complex test scenarios - edge cases, concurrency, security testing | "codex extra high test", "thorough codex test", "deep codex test" |
+| **low** | Small tweaks, adding a few targeted tests, simple coverage gaps | "codex low effort test", "quick codex test" |
+| **medium** (default) | Most testing tasks - unit tests, integration tests | "test with codex", "codex test" |
+| **high** | Broader test suites, less obvious edge cases | "codex high effort test" |
+| **xhigh** | Complex test scenarios - concurrency, security, intricate state | "codex extra high test", "thorough codex test", "deep codex test" |
+
+**How to set reasoning effort:**
+- Add `-c model_reasoning_effort="<level>"` to the codex command
+- Default to **medium** unless the user requests a different level
 
 ## Prerequisites
 
@@ -111,13 +121,15 @@ Execute Codex in workspace-write mode:
 
 ```bash
 codex exec \
-  -m gpt-5.3-codex \
+  -m gpt-5.5 \
   -s workspace-write \
-  -c model_reasoning_effort="high" \
+  -c model_reasoning_effort="medium" \
   -C "$(pwd)" \
   --output-last-message /tmp/codex-test-output.md \
   "[constructed prompt from Step 2]"
 ```
+
+`-m gpt-5.5` and `-c model_reasoning_effort="medium"` are the defaults — override with the model or effort level the user named.
 
 ### Step 4: Run the Tests (if Write & Run mode)
 
@@ -154,15 +166,22 @@ After Codex completes:
 
 ## Example Usage
 
-### Standard Testing (high effort)
+### Standard Testing (medium effort, default)
 **User says:** "Use codex to write tests for the URL shortener module"
 
 **Claude Code will:**
 1. Examine the source files and existing test setup
 2. Construct test prompt with the module context
-3. Run `codex exec -m gpt-5.3-codex -s workspace-write -c model_reasoning_effort="high" ...`
+3. Run `codex exec -m gpt-5.5 -s workspace-write -c model_reasoning_effort="medium" ...`
 4. Show test files created
 5. Run the tests and present results
+
+### Quick Testing (low effort)
+**User says:** "codex low effort test - just cover the happy path here"
+
+**Claude Code will:**
+1. Same steps as above, but use `-c model_reasoning_effort="low"` for fast, focused tests
+2. Low effort is appropriate for: small coverage gaps, single-function tests
 
 ### Thorough Testing (xhigh effort)
 **User says:** "use codex extra high to test the authentication flow"

@@ -14,16 +14,22 @@ Use this skill ONLY when the user explicitly asks Codex to plan or architect som
 
 This skill runs OpenAI's Codex CLI in non-interactive, read-only mode to analyze a codebase and produce an implementation plan for a feature, refactor, or architectural change. Codex reads the code but makes no modifications.
 
-## Reasoning Effort Levels
+## Model & Reasoning Effort
+
+Both the model (`-m`) and reasoning effort (`-c model_reasoning_effort=...`) are caller-configurable. Defaults: **`gpt-5.5`** + **`medium`** effort. If the user explicitly names a different Codex model or effort level, pass it through instead.
+
+### Effort Levels
 
 | Level | When to Use | Trigger Phrases |
 |-------|-------------|-----------------|
-| **high** (default) | Most planning tasks - features, refactors, integrations | "plan with codex", "codex plan" |
-| **xhigh** | Complex architecture, multi-service changes, migration strategies | "codex extra high plan", "thorough codex plan", "deep codex architect" |
+| **low** | Quick, scoped plans where the approach is mostly obvious | "codex low effort plan", "quick codex plan" |
+| **medium** (default) | Most planning tasks - features, refactors, integrations | "plan with codex", "codex plan" |
+| **high** | Complex multi-file or multi-service plans | "codex high effort plan" |
+| **xhigh** | Complex architecture, migration strategies, multi-service overhauls | "codex extra high plan", "thorough codex plan", "deep codex architect" |
 
 **How to set reasoning effort:**
-- Add `-c model_reasoning_effort="high"` or `-c model_reasoning_effort="xhigh"` to the codex command
-- Default to **high** unless user explicitly requests extra high or the task involves complex architecture
+- Add `-c model_reasoning_effort="<level>"` to the codex command
+- Default to **medium** unless the user requests a different level or the task is clearly low/high/xhigh complexity
 
 ## Prerequisites
 
@@ -101,18 +107,18 @@ Execute Codex in non-interactive, read-only mode:
 ```bash
 # Run Codex in read-only mode for planning
 codex exec \
-  -m gpt-5.3-codex \
+  -m gpt-5.5 \
   -s read-only \
-  -c model_reasoning_effort="high" \
+  -c model_reasoning_effort="medium" \
   -C "$(pwd)" \
   --output-last-message /tmp/codex-plan-output.md \
   "[constructed prompt from Step 2]"
 ```
 
 **Command flags explained:**
-- `-m gpt-5.3-codex`: Use the Codex 5.3 model
+- `-m gpt-5.5`: Use GPT-5.5 (override with whatever model the user names)
 - `-s read-only`: Read-only mode - Codex reads the codebase but cannot modify anything
-- `-c model_reasoning_effort="high"`: Reasoning effort level (use "xhigh" for complex architecture)
+- `-c model_reasoning_effort="medium"`: Default reasoning effort (use `low`/`high`/`xhigh` when the user asks for a different level)
 - `-C "$(pwd)"`: Set working directory to current project
 - `--output-last-message`: Capture Codex's plan to a file
 
@@ -137,16 +143,23 @@ After Codex completes:
 
 ## Example Usage
 
-### Standard Planning (high effort)
+### Standard Planning (medium effort, default)
 **User says:** "Use codex to plan adding authentication to this app"
 
 **Claude Code will:**
 1. Examine the project structure and tech stack
 2. Ask for specific requirements if needed
 3. Construct planning prompt with the feature context
-4. Run `codex exec -m gpt-5.3-codex -s read-only -c model_reasoning_effort="high" ...`
+4. Run `codex exec -m gpt-5.5 -s read-only -c model_reasoning_effort="medium" ...`
 5. Present the implementation plan
 6. Offer to refine or proceed with implementation
+
+### Quick Planning (low effort)
+**User says:** "codex low effort plan for renaming this module"
+
+**Claude Code will:**
+1. Same steps as above, but use `-c model_reasoning_effort="low"` for fast, scoped plans
+2. Low effort is appropriate for: small refactors, rename plans, simple feature stubs
 
 ### Complex Architecture (xhigh effort)
 **User says:** "codex extra high plan the migration from REST to GraphQL"

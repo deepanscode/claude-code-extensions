@@ -12,18 +12,22 @@ Use this skill when the user wants code changes reviewed by OpenAI's Codex CLI a
 
 This skill runs OpenAI's Codex CLI in non-interactive, read-only mode to review code changes and provide feedback on bugs, security vulnerabilities, best practices, and correctness.
 
-## Reasoning Effort Levels
+## Model & Reasoning Effort
 
-Codex supports different reasoning effort levels. Choose based on complexity:
+Both the model (`-m`) and reasoning effort (`-c model_reasoning_effort=...`) are caller-configurable. Defaults: **`gpt-5.5`** + **`medium`** effort. If the user explicitly names a different Codex model or effort level, pass it through instead.
+
+### Effort Levels
 
 | Level | When to Use | Trigger Phrases |
 |-------|-------------|-----------------|
-| **high** (default) | Most reviews - features, bug fixes, standard changes | "review with codex", "codex review" |
-| **xhigh** | Complex implementations, security-sensitive code, architectural changes | "codex extra high review", "use codex extra high", "thorough codex review", "deep codex review" |
+| **low** | Tiny diffs, doc-only changes, low-risk tweaks | "codex low effort review", "quick codex review" |
+| **medium** (default) | Most reviews - features, bug fixes, standard changes | "review with codex", "codex review" |
+| **high** | Larger diffs, business-critical paths, careful reviews | "codex high effort review" |
+| **xhigh** | Security-sensitive code, complex algorithms, architectural changes | "codex extra high review", "use codex extra high", "thorough codex review", "deep codex review" |
 
 **How to set reasoning effort:**
-- Add `-c model_reasoning_effort="high"` or `-c model_reasoning_effort="xhigh"` to the codex command
-- Default to **high** unless user explicitly requests extra high or the changes are complex/security-critical
+- Add `-c model_reasoning_effort="<level>"` to the codex command
+- Default to **medium** unless the user requests a different level or the changes are clearly low/high/xhigh complexity
 
 ## Prerequisites
 
@@ -98,11 +102,11 @@ cat > "$PROMPT_FILE" << 'PROMPT_EOF'
 PROMPT_EOF
 
 # Run Codex in read-only, non-interactive mode
-# Use REASONING_EFFORT="high" by default, or "xhigh" if user requested
+# Default effort is "medium"; bump to "high"/"xhigh" for complex/security-critical reviews or drop to "low" for tiny diffs
 codex exec \
-  -m gpt-5.3-codex \
+  -m gpt-5.5 \
   -s read-only \
-  -c model_reasoning_effort="high" \
+  -c model_reasoning_effort="medium" \
   -C "$(pwd)" \
   --output-last-message /tmp/codex-review-output.md \
   "$(cat "$PROMPT_FILE")"
@@ -112,9 +116,9 @@ rm "$PROMPT_FILE"
 ```
 
 **Command flags explained:**
-- `-m gpt-5.3-codex`: Use the Codex 5.3 model
+- `-m gpt-5.5`: Use GPT-5.5 (override with whatever model the user names)
 - `-s read-only`: Sandbox mode - Codex can read files but cannot modify anything (do NOT use `--full-auto` as it overrides this to `workspace-write`)
-- `-c model_reasoning_effort="high"`: Reasoning effort level (use "xhigh" for complex reviews)
+- `-c model_reasoning_effort="medium"`: Default reasoning effort (use `low`/`high`/`xhigh` when the user asks for a different level)
 - `-C "$(pwd)"`: Set working directory to current project
 - `--output-last-message`: Capture Codex's final response to a file
 
@@ -138,16 +142,23 @@ After Codex completes:
 
 ## Example Usage
 
-### Standard Review (high effort)
+### Standard Review (medium effort, default)
 **User says:** "I just finished implementing the user authentication feature, can you have codex review it?"
 
 **Claude Code will:**
 1. Run `git diff HEAD` to get all changes
 2. Ask for any additional context if needed
 3. Construct review prompt with the auth feature context
-4. Run `codex exec -m gpt-5.3-codex -s read-only -c model_reasoning_effort="high" ...`
+4. Run `codex exec -m gpt-5.5 -s read-only -c model_reasoning_effort="medium" ...`
 5. Present Codex's review feedback
 6. Offer to help implement suggested changes
+
+### Quick Review (low effort)
+**User says:** "codex low effort review on this rename PR"
+
+**Claude Code will:**
+1. Same steps as above, but use `-c model_reasoning_effort="low"` for fast sanity-check reviews
+2. Low effort is appropriate for: rename-only diffs, doc updates, formatting changes
 
 ### Thorough Review (xhigh effort)
 **User says:** "use codex extra high to review this security implementation"

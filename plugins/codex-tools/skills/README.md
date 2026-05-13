@@ -30,13 +30,24 @@ skills/
 - Codex CLI installed (`codex` command available)
 - Codex authenticated (`codex login`)
 
-## Reasoning Effort Levels
+## Model & Reasoning Effort
 
-All skills support two effort levels:
+Both the model and reasoning effort are caller-configurable. When Claude Code invokes a skill, it can pass either based on the user's phrasing. Sensible defaults are used otherwise.
+
+**Default model:** `gpt-5.5`
+**Default reasoning effort:** `medium`
+
+### Effort Levels
 
 | Level | When to Use |
 |-------|-------------|
-| **high** (default) | Standard tasks |
-| **xhigh** | Complex, security-critical, or architectural work |
+| **low** | Trivial / small-scope changes, quick sanity checks |
+| **medium** (default) | Standard tasks - features, bug fixes, normal reviews |
+| **high** | Complex tasks, security-sensitive code, multi-file changes |
+| **xhigh** | Architectural overhauls, security-critical reviews, very complex work |
 
-Trigger with phrases like "codex extra high review" or "thorough codex plan".
+Trigger with phrases like "codex low effort review", "codex high effort develop", or "codex extra high review".
+
+### Overriding the Model
+
+If the user explicitly names a different Codex model (e.g. "use gpt-5-codex to review"), pass that name to `-m` instead of the default. Otherwise use `gpt-5.5`.

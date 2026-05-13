@@ -14,16 +14,22 @@ Use this skill ONLY when the user explicitly asks Codex to develop or build some
 
 This skill runs OpenAI's Codex CLI in non-interactive mode with workspace-write access to implement features, build components, or write code based on a feature description provided by the user.
 
-## Reasoning Effort Levels
+## Model & Reasoning Effort
+
+Both the model (`-m`) and reasoning effort (`-c model_reasoning_effort=...`) are caller-configurable. Defaults: **`gpt-5.5`** + **`medium`** effort. If the user explicitly names a different Codex model or effort level, pass it through instead.
+
+### Effort Levels
 
 | Level | When to Use | Trigger Phrases |
 |-------|-------------|-----------------|
-| **high** (default) | Most development tasks - features, components, utilities | "develop with codex", "codex build" |
-| **xhigh** | Complex features, multi-file implementations, architectural work | "codex extra high develop", "thorough codex build", "deep codex develop" |
+| **low** | Trivial / scoped edits, small utilities, boilerplate | "codex low effort develop", "quick codex build" |
+| **medium** (default) | Most development tasks - features, components, utilities | "develop with codex", "codex build" |
+| **high** | Complex features, multi-file implementations, careful work | "codex high effort develop" |
+| **xhigh** | Architectural work, intricate business logic, security-sensitive code | "codex extra high develop", "thorough codex build", "deep codex develop" |
 
 **How to set reasoning effort:**
-- Add `-c model_reasoning_effort="high"` or `-c model_reasoning_effort="xhigh"` to the codex command
-- Default to **high** unless user explicitly requests extra high or the task is architecturally complex
+- Add `-c model_reasoning_effort="<level>"` to the codex command
+- Default to **medium** unless the user requests a different level or the task is clearly low/high/xhigh complexity
 
 ## Prerequisites
 
@@ -95,20 +101,20 @@ Execute Codex in non-interactive mode with workspace-write access:
 
 ```bash
 # Run Codex with workspace-write access for development
-# Use REASONING_EFFORT="high" by default, or "xhigh" for complex features
+# Default effort is "medium"; bump to "high"/"xhigh" for complex features or drop to "low" for scoped edits
 codex exec \
-  -m gpt-5.3-codex \
+  -m gpt-5.5 \
   -s workspace-write \
-  -c model_reasoning_effort="high" \
+  -c model_reasoning_effort="medium" \
   -C "$(pwd)" \
   --output-last-message /tmp/codex-dev-output.md \
   "[constructed prompt from Step 2]"
 ```
 
 **Command flags explained:**
-- `-m gpt-5.3-codex`: Use the Codex 5.3 model
+- `-m gpt-5.5`: Use GPT-5.5 (override with whatever model the user names)
 - `-s workspace-write`: Sandbox mode - Codex can read and write files in the workspace (do NOT use `--full-auto` as it conflicts with explicit sandbox settings)
-- `-c model_reasoning_effort="high"`: Reasoning effort level (use "xhigh" for complex features)
+- `-c model_reasoning_effort="medium"`: Default reasoning effort (use `low`/`high`/`xhigh` when the user asks for a different level)
 - `-C "$(pwd)"`: Set working directory to current project
 - `--output-last-message`: Capture Codex's final response to a file
 
@@ -134,16 +140,23 @@ After Codex completes:
 
 ## Example Usage
 
-### Standard Development (high effort)
+### Standard Development (medium effort, default)
 **User says:** "Use codex to build a CLI argument parser for this project"
 
 **Claude Code will:**
 1. Examine the project structure and tech stack
 2. Ask for any specific requirements if needed
 3. Construct development prompt with the feature context
-4. Run `codex exec -m gpt-5.3-codex -s workspace-write -c model_reasoning_effort="high" ...`
+4. Run `codex exec -m gpt-5.5 -s workspace-write -c model_reasoning_effort="medium" ...`
 5. Show `git diff` of what Codex created
 6. Present summary and offer next steps
+
+### Quick Development (low effort)
+**User says:** "codex low effort develop the utility function for this"
+
+**Claude Code will:**
+1. Same steps as above, but use `-c model_reasoning_effort="low"` for fast, scoped output
+2. Low effort is appropriate for: small utilities, glue code, boilerplate
 
 ### Complex Development (xhigh effort)
 **User says:** "use codex extra high to build the authentication middleware"
