@@ -27,6 +27,12 @@
       "source": "./plugins/clean-architecture",
       "description": "Architectural skills for layered backends — Clean Architecture layering, modular-monolith contracts boundary, route-derived IDs, soft-delete-by-default",
       "version": "0.1.0"
+    },
+    {
+      "name": "1password",
+      "source": "./plugins/1password",
+      "description": "Resolve secrets via the 1Password CLI (`op`) instead of hardcoding them — secret references, `op read`, `_CMD` env-var indirection, `op run --env-file`, service accounts",
+      "version": "0.1.0"
     }
   ]
 }

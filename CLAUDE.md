@@ -1,6 +1,6 @@
 # Claude Code Extensions
 
-A plugin marketplace for Claude Code with Codex dev lifecycle tools and a unified Git platform MCP server.
+A plugin marketplace for Claude Code with Codex dev lifecycle tools, a unified Git platform MCP server, a framework-agnostic dev-workflow bundle, a Clean-Architecture skill pack, and a 1Password CLI secrets skill.
 
 ## Plugin Structure
 
@@ -8,21 +8,20 @@ A plugin marketplace for Claude Code with Codex dev lifecycle tools and a unifie
 .claude-plugin/              Marketplace manifest
 plugins/
 ├── codex-tools/             Codex CLI skills + agents
-│   ├── skills/
-│   │   ├── codex-plan/      Plan features and architecture
-│   │   ├── codex-develop/   Build and implement features
-│   │   ├── codex-test/      Write and run tests
-│   │   ├── codex-debug/     Investigate and fix bugs
-│   │   └── codex-review/    Review code changes
-│   └── agents/
-│       ├── codex-planner/   Background planning agent
-│       ├── codex-developer/ Background development agent
-│       ├── codex-tester/    Background testing agent
-│       └── codex-reviewer/  Background review agent
-└── git-platform/            Unified Git MCP server
-    ├── src/                 TypeScript source
-    ├── .mcp.json            MCP server config
-    └── .claude-plugin/      Plugin manifest
+│   ├── skills/              codex-plan, codex-develop, codex-test, codex-debug, codex-review
+│   └── agents/              codex-planner, codex-developer, codex-tester, codex-reviewer
+├── git-platform/            Unified Git MCP server (GitHub / GitLab / Bitbucket)
+│   ├── src/                 TypeScript source
+│   ├── .mcp.json            MCP server config
+│   └── .claude-plugin/      Plugin manifest
+├── dev-workflow/            Branch / commit / migration / docs lifecycle
+│   ├── skills/              branch-naming, commit-message-format, migration-safety
+│   ├── commands/            adr-new, spec-new, guide-new, runbook-new, ticket-start, review-pr, …
+│   └── agents/              docs-sync, test-gap
+├── clean-architecture/      Architectural skills for layered backends
+│   └── skills/              clean-arch-boundaries, modular-monolith-contracts, route-derived-ids, soft-delete-required
+└── 1password/               1Password CLI secrets skill
+    └── skills/              op-secrets
 ```
 
 ## Installation
@@ -31,11 +30,12 @@ plugins/
 # Add the marketplace
 /plugin marketplace add deepanscode/claude-code-extensions
 
-# Install Codex skills + agents
+# Install whichever plugins you want
 /plugin install codex-tools@deepanscode
-
-# Install Git Platform MCP server (GitHub/GitLab/Bitbucket)
 /plugin install git-platform@deepanscode
+/plugin install dev-workflow@deepanscode
+/plugin install clean-architecture@deepanscode
+/plugin install 1password@deepanscode
 ```
 
 ## Conventions

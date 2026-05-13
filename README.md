@@ -1,6 +1,6 @@
 # Claude Code Extensions
 
-A plugin marketplace for [Claude Code](https://docs.anthropic.com/en/docs/claude-code) with Codex-powered dev tools, a unified Git platform MCP server, a framework-agnostic dev-workflow bundle, and a Clean-Architecture skill pack.
+A plugin marketplace for [Claude Code](https://docs.anthropic.com/en/docs/claude-code) with Codex-powered dev tools, a unified Git platform MCP server, a framework-agnostic dev-workflow bundle, a Clean-Architecture skill pack, and a 1Password CLI secrets skill.
 
 ## Available Plugins
 
@@ -107,6 +107,18 @@ Architectural skills for layered backend projects. Multi-language examples (.NET
 | `route-derived-ids` | Controllers / route handlers with `{id}` in route + matching validator | Controller sets route IDs; body validators don't check them |
 | `soft-delete-required` | New entities / new tables / new migrations | Soft-delete base + query filter; junction tables exempt |
 
+---
+
+### 1password `v0.1.0`
+
+A focused skill that teaches Claude Code to resolve secrets through the [1Password CLI](https://developer.1password.com/docs/cli/) (`op`) instead of hardcoding them in shells, dotfiles, or repo config. Triggers when the user mentions tokens, API keys, env vars, or `.env` files.
+
+| Skill | Covers |
+|---|---|
+| `op-secrets` | Secret reference syntax (`op://vault/item/field`), `op read` one-shots, `_CMD` env-var indirection (works with `git-platform`), `op run --env-file` subprocess injection, discovery commands, service accounts for CI, common pitfalls |
+
+**Prerequisites**: 1Password CLI installed (`brew install 1password-cli` / `winget install 1Password.1PasswordCLI` / apt) and either the desktop-app integration enabled or a `OP_SERVICE_ACCOUNT_TOKEN` exported.
+
 ## Installation
 
 ### Quick start
@@ -120,6 +132,7 @@ Architectural skills for layered backend projects. Multi-language examples (.NET
 /plugin install git-platform@deepanscode
 /plugin install dev-workflow@deepanscode
 /plugin install clean-architecture@deepanscode
+/plugin install 1password@deepanscode
 ```
 
 ### Updating
@@ -136,6 +149,7 @@ Architectural skills for layered backend projects. Multi-language examples (.NET
 | git-platform | `gh` CLI (GitHub), `glab` CLI (GitLab), or Bitbucket env vars |
 | dev-workflow | A git repo. `/ticket-start` works best with the Atlassian / Linear / GitHub MCP integration available |
 | clean-architecture | Nothing — skills are pure markdown guidance |
+| 1password | [1Password CLI](https://developer.1password.com/docs/cli/get-started/) (`op`) installed and either the desktop-app integration or `OP_SERVICE_ACCOUNT_TOKEN` configured |
 
 ## Repository Structure
 
@@ -206,6 +220,12 @@ plugins/
       modular-monolith-contracts/SKILL.md
       route-derived-ids/SKILL.md
       soft-delete-required/SKILL.md
+
+  1password/                     1Password CLI secrets skill
+    .claude-plugin/
+      plugin.json
+    skills/
+      op-secrets/SKILL.md
 ```
 
 ## How It Works

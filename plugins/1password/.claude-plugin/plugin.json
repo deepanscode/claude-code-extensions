@@ -1,0 +1,9 @@
+{
+  "name": "1password",
+  "description": "Resolve secrets via the 1Password CLI (`op`) instead of hardcoding them. Covers secret-reference syntax (`op://vault/item/field`), `op read` for one-shot lookups, `_CMD` env-var indirection, `op run --env-file` for subprocess injection, discovery commands, and service-account auth for CI.",
+  "version": "0.1.0",
+  "author": {
+    "name": "deepanscode"
+  },
+  "keywords": ["1password", "op", "secrets", "credentials", "env-vars", "secret-management"]
+}
