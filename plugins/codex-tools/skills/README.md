@@ -34,20 +34,20 @@ skills/
 
 Both the model and reasoning effort are caller-configurable. When Claude Code invokes a skill, it can pass either based on the user's phrasing. Sensible defaults are used otherwise.
 
-**Default model:** `gpt-5.5`
-**Default reasoning effort:** `medium`
+**Default model:** `gpt-6.2-astra`
+**Default reasoning effort:** `high`
 
 ### Effort Levels
 
 | Level | When to Use |
 |-------|-------------|
 | **low** | Trivial / small-scope changes, quick sanity checks |
-| **medium** (default) | Standard tasks - features, bug fixes, normal reviews |
-| **high** | Complex tasks, security-sensitive code, multi-file changes |
+| **medium** | Standard tasks - features, bug fixes, normal reviews |
+| **high** (default) | Complex tasks, security-sensitive code, multi-file changes |
 | **xhigh** | Architectural overhauls, security-critical reviews, very complex work |
 
 Trigger with phrases like "codex low effort review", "codex high effort develop", or "codex extra high review".
 
 ### Overriding the Model
 
-If the user explicitly names a different Codex model (e.g. "use gpt-5-codex to review"), pass that name to `-m` instead of the default. Otherwise use `gpt-5.5`.
+If the user explicitly names a different Codex model (e.g. "use gpt-5-codex to review"), pass that name to `-m` instead of the default. Otherwise use `gpt-6.2-astra`.

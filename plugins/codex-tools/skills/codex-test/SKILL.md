@@ -23,20 +23,20 @@ This skill runs OpenAI's Codex CLI in non-interactive mode with workspace-write 
 
 ## Model & Reasoning Effort
 
-Both the model (`-m`) and reasoning effort (`-c model_reasoning_effort=...`) are caller-configurable. Defaults: **`gpt-5.5`** + **`medium`** effort. If the user explicitly names a different Codex model or effort level, pass it through instead.
+Both the model (`-m`) and reasoning effort (`-c model_reasoning_effort=...`) are caller-configurable. Defaults: **`gpt-6.2-astra`** + **`high`** effort. If the user explicitly names a different Codex model or effort level, pass it through instead.
 
 ### Effort Levels
 
 | Level | When to Use | Trigger Phrases |
 |-------|-------------|-----------------|
 | **low** | Small tweaks, adding a few targeted tests, simple coverage gaps | "codex low effort test", "quick codex test" |
-| **medium** (default) | Most testing tasks - unit tests, integration tests | "test with codex", "codex test" |
-| **high** | Broader test suites, less obvious edge cases | "codex high effort test" |
+| **medium** | Most testing tasks - unit tests, integration tests | "codex medium effort" |
+| **high** (default) | Broader test suites, less obvious edge cases | "codex high effort test" |
 | **xhigh** | Complex test scenarios - concurrency, security, intricate state | "codex extra high test", "thorough codex test", "deep codex test" |
 
 **How to set reasoning effort:**
 - Add `-c model_reasoning_effort="<level>"` to the codex command
-- Default to **medium** unless the user requests a different level
+- Default to **high** unless the user requests a different level
 
 ## Prerequisites
 
@@ -121,15 +121,15 @@ Execute Codex in workspace-write mode:
 
 ```bash
 codex exec \
-  -m gpt-5.5 \
+  -m gpt-6.2-astra \
   -s workspace-write \
-  -c model_reasoning_effort="medium" \
+  -c model_reasoning_effort="high" \
   -C "$(pwd)" \
   --output-last-message /tmp/codex-test-output.md \
   "[constructed prompt from Step 2]"
 ```
 
-`-m gpt-5.5` and `-c model_reasoning_effort="medium"` are the defaults — override with the model or effort level the user named.
+`-m gpt-6.2-astra` and `-c model_reasoning_effort="high"` are the defaults — override with the model or effort level the user named.
 
 ### Step 4: Run the Tests (if Write & Run mode)
 
@@ -166,13 +166,13 @@ After Codex completes:
 
 ## Example Usage
 
-### Standard Testing (medium effort, default)
+### Standard Testing (high effort, default)
 **User says:** "Use codex to write tests for the URL shortener module"
 
 **Claude Code will:**
 1. Examine the source files and existing test setup
 2. Construct test prompt with the module context
-3. Run `codex exec -m gpt-5.5 -s workspace-write -c model_reasoning_effort="medium" ...`
+3. Run `codex exec -m gpt-6.2-astra -s workspace-write -c model_reasoning_effort="high" ...`
 4. Show test files created
 5. Run the tests and present results
 

@@ -29,15 +29,15 @@ This skill runs OpenAI's Codex CLI in non-interactive mode to investigate bugs, 
 
 ## Model & Reasoning Effort
 
-Both the model (`-m`) and reasoning effort (`-c model_reasoning_effort=...`) are caller-configurable. Defaults: **`gpt-5.5`** + **`medium`** effort. If the user explicitly names a different Codex model or effort level, pass it through instead.
+Both the model (`-m`) and reasoning effort (`-c model_reasoning_effort=...`) are caller-configurable. Defaults: **`gpt-6.2-astra`** + **`high`** effort. If the user explicitly names a different Codex model or effort level, pass it through instead.
 
 ### Effort Levels
 
 | Level | When to Use | Trigger Phrases |
 |-------|-------------|-----------------|
 | **low** | Obvious bugs, typos, small mistakes with clear stack traces | "codex low effort debug", "quick codex debug" |
-| **medium** (default) | Most bugs - runtime errors, logic issues, standard debugging | "debug with codex", "codex debug" |
-| **high** | Tricky multi-file bugs, less-obvious root causes | "codex high effort debug" |
+| **medium** | Most bugs - runtime errors, logic issues, standard debugging | "codex medium effort" |
+| **high** (default) | Tricky multi-file bugs, less-obvious root causes | "codex high effort debug" |
 | **xhigh** | Race conditions, memory issues, intermittent failures, security vulnerabilities | "codex extra high debug", "thorough codex debug", "deep codex investigate" |
 
 ## Prerequisites
@@ -118,28 +118,28 @@ Execute Codex in the appropriate mode:
 ```bash
 # INVESTIGATE MODE (default) - read-only, Codex cannot modify files
 codex exec \
-  -m gpt-5.5 \
+  -m gpt-6.2-astra \
   -s read-only \
-  -c model_reasoning_effort="medium" \
+  -c model_reasoning_effort="high" \
   -C "$(pwd)" \
   --output-last-message /tmp/codex-debug-output.md \
   "[constructed prompt from Step 2]"
 
 # FIX MODE - workspace-write, Codex can apply the fix
 codex exec \
-  -m gpt-5.5 \
+  -m gpt-6.2-astra \
   -s workspace-write \
-  -c model_reasoning_effort="medium" \
+  -c model_reasoning_effort="high" \
   -C "$(pwd)" \
   --output-last-message /tmp/codex-debug-output.md \
   "[constructed prompt from Step 2]"
 ```
 
 **Command flags explained:**
-- `-m gpt-5.5`: Use GPT-5.5 (override with whatever model the user names)
+- `-m gpt-6.2-astra`: Use GPT-6.2 Astra (override with whatever model the user names)
 - `-s read-only`: Investigation mode - Codex reads code but cannot modify (default)
 - `-s workspace-write`: Fix mode - Codex can read and write files to apply the fix
-- `-c model_reasoning_effort="medium"`: Default reasoning effort (use `low`/`high`/`xhigh` when the user asks for a different level)
+- `-c model_reasoning_effort="high"`: Default reasoning effort (use `low`/`medium`/`xhigh` when the user asks for a different level)
 - `-C "$(pwd)"`: Set working directory to current project
 - `--output-last-message`: Capture Codex's final response to a file
 
@@ -167,24 +167,24 @@ After Codex completes:
 
 ## Example Usage
 
-### Bug Investigation (read-only, medium effort, default)
+### Bug Investigation (read-only, high effort, default)
 **User says:** "Use codex to debug why the API returns 500 on the /users endpoint"
 
 **Claude Code will:**
 1. Gather project context and recent changes
 2. Ask for error logs or stack traces if not provided
 3. Construct debug prompt focusing on the API endpoint
-4. Run `codex exec -m gpt-5.5 -s read-only -c model_reasoning_effort="medium" ...`
+4. Run `codex exec -m gpt-6.2-astra -s read-only -c model_reasoning_effort="high" ...`
 5. Present root cause analysis
 6. Offer to have Codex apply the fix
 
-### Bug Fix (workspace-write, medium effort)
+### Bug Fix (workspace-write, high effort)
 **User says:** "Have codex fix the null pointer exception in the auth middleware"
 
 **Claude Code will:**
 1. Same investigation steps as above
 2. Run in workspace-write mode since user said "fix"
-3. Run `codex exec -m gpt-5.5 -s workspace-write -c model_reasoning_effort="medium" ...`
+3. Run `codex exec -m gpt-6.2-astra -s workspace-write -c model_reasoning_effort="high" ...`
 4. Show `git diff` of the fix
 5. Suggest verification steps
 

@@ -33,8 +33,8 @@ You are a development sub-agent. Your job is to run Codex to build a feature and
 - Working directory: [PROJECT_PATH]
 - Feature: [FEATURE_DESCRIPTION]
 - Tech stack: [TECH_STACK]
-- Model: [MODEL]            # default: gpt-5.5
-- Reasoning effort: [low|medium|high|xhigh]   # default: medium
+- Model: [MODEL]            # default: gpt-6.2-astra
+- Reasoning effort: [low|medium|high|xhigh]   # default: high
 
 ## Your Task
 
@@ -89,8 +89,8 @@ Do not include intermediate steps. Keep it brief.
 
 ## Caller Overrides
 
-- **Model**: when the user names a different Codex model (e.g. "use gpt-5-codex"), pass that to `-m` instead of the default `gpt-5.5`.
-- **Effort**: pick `low`/`medium`/`high`/`xhigh` from the user's phrasing. Default to `medium` when unspecified.
+- **Model**: when the user names a different Codex model (e.g. "use gpt-5-codex"), pass that to `-m` instead of the default `gpt-6.2-astra`.
+- **Effort**: pick `low`/`medium`/`high`/`xhigh` from the user's phrasing. Default to `high` when unspecified.
 
 ## Notes
 

@@ -16,20 +16,20 @@ This skill runs OpenAI's Codex CLI in non-interactive, read-only mode to analyze
 
 ## Model & Reasoning Effort
 
-Both the model (`-m`) and reasoning effort (`-c model_reasoning_effort=...`) are caller-configurable. Defaults: **`gpt-5.5`** + **`medium`** effort. If the user explicitly names a different Codex model or effort level, pass it through instead.
+Both the model (`-m`) and reasoning effort (`-c model_reasoning_effort=...`) are caller-configurable. Defaults: **`gpt-6.2-astra`** + **`high`** effort. If the user explicitly names a different Codex model or effort level, pass it through instead.
 
 ### Effort Levels
 
 | Level | When to Use | Trigger Phrases |
 |-------|-------------|-----------------|
 | **low** | Quick, scoped plans where the approach is mostly obvious | "codex low effort plan", "quick codex plan" |
-| **medium** (default) | Most planning tasks - features, refactors, integrations | "plan with codex", "codex plan" |
-| **high** | Complex multi-file or multi-service plans | "codex high effort plan" |
+| **medium** | Most planning tasks - features, refactors, integrations | "codex medium effort" |
+| **high** (default) | Complex multi-file or multi-service plans | "codex high effort plan" |
 | **xhigh** | Complex architecture, migration strategies, multi-service overhauls | "codex extra high plan", "thorough codex plan", "deep codex architect" |
 
 **How to set reasoning effort:**
 - Add `-c model_reasoning_effort="<level>"` to the codex command
-- Default to **medium** unless the user requests a different level or the task is clearly low/high/xhigh complexity
+- Default to **high** unless the user requests a different level
 
 ## Prerequisites
 
@@ -107,18 +107,18 @@ Execute Codex in non-interactive, read-only mode:
 ```bash
 # Run Codex in read-only mode for planning
 codex exec \
-  -m gpt-5.5 \
+  -m gpt-6.2-astra \
   -s read-only \
-  -c model_reasoning_effort="medium" \
+  -c model_reasoning_effort="high" \
   -C "$(pwd)" \
   --output-last-message /tmp/codex-plan-output.md \
   "[constructed prompt from Step 2]"
 ```
 
 **Command flags explained:**
-- `-m gpt-5.5`: Use GPT-5.5 (override with whatever model the user names)
+- `-m gpt-6.2-astra`: Use GPT-6.2 Astra (override with whatever model the user names)
 - `-s read-only`: Read-only mode - Codex reads the codebase but cannot modify anything
-- `-c model_reasoning_effort="medium"`: Default reasoning effort (use `low`/`high`/`xhigh` when the user asks for a different level)
+- `-c model_reasoning_effort="high"`: Default reasoning effort (use `low`/`medium`/`xhigh` when the user asks for a different level)
 - `-C "$(pwd)"`: Set working directory to current project
 - `--output-last-message`: Capture Codex's plan to a file
 
@@ -143,14 +143,14 @@ After Codex completes:
 
 ## Example Usage
 
-### Standard Planning (medium effort, default)
+### Standard Planning (high effort, default)
 **User says:** "Use codex to plan adding authentication to this app"
 
 **Claude Code will:**
 1. Examine the project structure and tech stack
 2. Ask for specific requirements if needed
 3. Construct planning prompt with the feature context
-4. Run `codex exec -m gpt-5.5 -s read-only -c model_reasoning_effort="medium" ...`
+4. Run `codex exec -m gpt-6.2-astra -s read-only -c model_reasoning_effort="high" ...`
 5. Present the implementation plan
 6. Offer to refine or proceed with implementation
 

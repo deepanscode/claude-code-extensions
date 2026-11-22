@@ -4,7 +4,7 @@ A plugin marketplace for [Claude Code](https://docs.anthropic.com/en/docs/claude
 
 ## Available Plugins
 
-### codex-tools `v1.0.0`
+### codex-tools `v1.1.0`
 
 Full development lifecycle powered by OpenAI's [Codex CLI](https://github.com/openai/codex). Includes 5 skills (slash commands) and 4 background agents that work together to plan, build, test, debug, and review code.
 
@@ -27,13 +27,15 @@ Full development lifecycle powered by OpenAI's [Codex CLI](https://github.com/op
 | codex-tester | Writes and runs tests in the background |
 | codex-reviewer | Reviews code and returns a concise summary |
 
-All skills and agents support two reasoning effort levels:
-- **high** (default) — standard tasks
-- **xhigh** — complex, security-critical, or architectural work (trigger with "codex extra high ...")
+Codex defaults to `gpt-6.2-astra` with high reasoning effort. You can override either setting.
 
 **Prerequisites**: [Codex CLI](https://github.com/openai/codex) installed and authenticated (`codex login`).
 
 ---
+
+### gemini-tools `v1.0.0`
+
+Five skills and a Gemini subagent delegate to the authenticated Antigravity CLI (`agy`), using `gemini-4-neon-high` at high effort. Use `/gemini-tools:gemini-review` to review a change.
 
 ### git-platform `v0.1.0`
 
@@ -129,6 +131,7 @@ A focused skill that teaches Claude Code to resolve secrets through the [1Passwo
 
 # 2. Install the plugins you want
 /plugin install codex-tools@deepanscode
+/plugin install gemini-tools@deepanscode
 /plugin install git-platform@deepanscode
 /plugin install dev-workflow@deepanscode
 /plugin install clean-architecture@deepanscode

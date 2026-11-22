@@ -8,6 +8,12 @@
       "name": "codex-tools",
       "source": "./plugins/codex-tools",
       "description": "Full dev lifecycle with OpenAI Codex CLI — plan, develop, test, debug, and review code using Codex agents",
+      "version": "1.1.0"
+    },
+    {
+      "name": "gemini-tools",
+      "source": "./plugins/gemini-tools",
+      "description": "Delegate planning, development, testing, debugging, and code review to Gemini through Antigravity CLI.",
       "version": "1.0.0"
     },
     {

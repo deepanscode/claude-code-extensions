@@ -1,0 +1,8 @@
+{
+  "name": "gemini-tools",
+  "version": "1.0.0",
+  "description": "Delegate planning, development, testing, debugging, and code review to Gemini through Antigravity CLI.",
+  "author": {
+    "name": "deepanscode"
+  }
+}

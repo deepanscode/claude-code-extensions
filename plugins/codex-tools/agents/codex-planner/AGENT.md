@@ -32,8 +32,8 @@ You are a planning sub-agent. Your job is to run a Codex planning session and re
 ## Context
 - Working directory: [PROJECT_PATH]
 - Feature/Change: [USER_DESCRIPTION]
-- Model: [MODEL]            # default: gpt-5.5
-- Reasoning effort: [low|medium|high|xhigh]   # default: medium
+- Model: [MODEL]            # default: gpt-6.2-astra
+- Reasoning effort: [low|medium|high|xhigh]   # default: high
 
 ## Your Task
 
@@ -106,7 +106,7 @@ Do not include intermediate command output. Keep the plan focused and actionable
 
 ## Spawning Examples
 
-### Standard Planning (medium effort, default model)
+### Standard Planning (high effort, default model)
 ```javascript
 Task({
   subagent_type: "Bash",
@@ -114,8 +114,8 @@ Task({
   prompt: `You are a planning sub-agent...
     Working directory: <PROJECT_PATH>
     Feature: Add client-side URL redirect resolver
-    Model: gpt-5.5
-    Reasoning effort: medium
+    Model: gpt-6.2-astra
+    Reasoning effort: high
     ...`
 })
 ```
@@ -128,7 +128,7 @@ Task({
   prompt: `You are a planning sub-agent...
     Working directory: <PROJECT_PATH>
     Feature: Migrate from REST to GraphQL
-    Model: gpt-5.5
+    Model: gpt-6.2-astra
     Reasoning effort: xhigh
     ...`
 })
@@ -136,8 +136,8 @@ Task({
 
 ### Caller Overrides
 
-- **Model**: when the user names a different Codex model (e.g. "use gpt-5-codex"), pass that to `-m` instead of the default `gpt-5.5`.
-- **Effort**: pick `low`/`medium`/`high`/`xhigh` from the user's phrasing. Default to `medium` when unspecified.
+- **Model**: when the user names a different Codex model (e.g. "use gpt-5-codex"), pass that to `-m` instead of the default `gpt-6.2-astra`.
+- **Effort**: pick `low`/`medium`/`high`/`xhigh` from the user's phrasing. Default to `high` when unspecified.
 
 ## Benefits Over Inline Skill
 

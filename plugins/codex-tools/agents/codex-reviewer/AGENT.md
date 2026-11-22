@@ -32,8 +32,8 @@ You are a code review sub-agent. Your job is to run a Codex review and return a 
 ## Context
 - Working directory: [PROJECT_PATH]
 - Feature/Change: [USER_DESCRIPTION]
-- Model: [MODEL]            # default: gpt-5.5
-- Reasoning effort: [low|medium|high|xhigh]   # default: medium
+- Model: [MODEL]            # default: gpt-6.2-astra
+- Reasoning effort: [low|medium|high|xhigh]   # default: high
 
 ## Your Task
 
@@ -83,7 +83,7 @@ Do not include the full Codex output or any intermediate steps. Keep it brief.
 
 ## Spawning Examples
 
-### Standard Review (medium effort, default model)
+### Standard Review (high effort, default model)
 ```javascript
 Task({
   subagent_type: "Bash",
@@ -91,8 +91,8 @@ Task({
   prompt: `You are a code review sub-agent...
     Working directory: <PROJECT_PATH>
     Feature: Added user authentication
-    Model: gpt-5.5
-    Reasoning effort: medium
+    Model: gpt-6.2-astra
+    Reasoning effort: high
     ...`
 })
 ```
@@ -105,7 +105,7 @@ Task({
   prompt: `You are a code review sub-agent...
     Working directory: <PROJECT_PATH>
     Feature: Rename-only refactor
-    Model: gpt-5.5
+    Model: gpt-6.2-astra
     Reasoning effort: low
     ...`
 })
@@ -119,7 +119,7 @@ Task({
   prompt: `You are a code review sub-agent...
     Working directory: <PROJECT_PATH>
     Feature: Security-critical payment flow
-    Model: gpt-5.5
+    Model: gpt-6.2-astra
     Reasoning effort: xhigh
     ...`
 })
@@ -127,8 +127,8 @@ Task({
 
 ### Caller Overrides
 
-- **Model**: when the user names a different Codex model (e.g. "use gpt-5-codex"), pass that to `-m` instead of the default `gpt-5.5`.
-- **Effort**: pick `low`/`medium`/`high`/`xhigh` from the user's phrasing. Default to `medium` when unspecified.
+- **Model**: when the user names a different Codex model (e.g. "use gpt-5-codex"), pass that to `-m` instead of the default `gpt-6.2-astra`.
+- **Effort**: pick `low`/`medium`/`high`/`xhigh` from the user's phrasing. Default to `high` when unspecified.
 
 ## Benefits Over Inline Skill
 

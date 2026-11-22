@@ -14,20 +14,20 @@ This skill runs OpenAI's Codex CLI in non-interactive, read-only mode to review 
 
 ## Model & Reasoning Effort
 
-Both the model (`-m`) and reasoning effort (`-c model_reasoning_effort=...`) are caller-configurable. Defaults: **`gpt-5.5`** + **`medium`** effort. If the user explicitly names a different Codex model or effort level, pass it through instead.
+Both the model (`-m`) and reasoning effort (`-c model_reasoning_effort=...`) are caller-configurable. Defaults: **`gpt-6.2-astra`** + **`high`** effort. If the user explicitly names a different Codex model or effort level, pass it through instead.
 
 ### Effort Levels
 
 | Level | When to Use | Trigger Phrases |
 |-------|-------------|-----------------|
 | **low** | Tiny diffs, doc-only changes, low-risk tweaks | "codex low effort review", "quick codex review" |
-| **medium** (default) | Most reviews - features, bug fixes, standard changes | "review with codex", "codex review" |
-| **high** | Larger diffs, business-critical paths, careful reviews | "codex high effort review" |
+| **medium** | Most reviews - features, bug fixes, standard changes | "codex medium effort" |
+| **high** (default) | Larger diffs, business-critical paths, careful reviews | "codex high effort review" |
 | **xhigh** | Security-sensitive code, complex algorithms, architectural changes | "codex extra high review", "use codex extra high", "thorough codex review", "deep codex review" |
 
 **How to set reasoning effort:**
 - Add `-c model_reasoning_effort="<level>"` to the codex command
-- Default to **medium** unless the user requests a different level or the changes are clearly low/high/xhigh complexity
+- Default to **high** unless the user requests a different level
 
 ## Prerequisites
 
@@ -102,11 +102,11 @@ cat > "$PROMPT_FILE" << 'PROMPT_EOF'
 PROMPT_EOF
 
 # Run Codex in read-only, non-interactive mode
-# Default effort is "medium"; bump to "high"/"xhigh" for complex/security-critical reviews or drop to "low" for tiny diffs
+# Default effort is "high"; bump to "xhigh" for complex/security-critical reviews or drop to "low" for tiny diffs
 codex exec \
-  -m gpt-5.5 \
+  -m gpt-6.2-astra \
   -s read-only \
-  -c model_reasoning_effort="medium" \
+  -c model_reasoning_effort="high" \
   -C "$(pwd)" \
   --output-last-message /tmp/codex-review-output.md \
   "$(cat "$PROMPT_FILE")"
@@ -116,9 +116,9 @@ rm "$PROMPT_FILE"
 ```
 
 **Command flags explained:**
-- `-m gpt-5.5`: Use GPT-5.5 (override with whatever model the user names)
+- `-m gpt-6.2-astra`: Use GPT-6.2 Astra (override with whatever model the user names)
 - `-s read-only`: Sandbox mode - Codex can read files but cannot modify anything (do NOT use `--full-auto` as it overrides this to `workspace-write`)
-- `-c model_reasoning_effort="medium"`: Default reasoning effort (use `low`/`high`/`xhigh` when the user asks for a different level)
+- `-c model_reasoning_effort="high"`: Default reasoning effort (use `low`/`medium`/`xhigh` when the user asks for a different level)
 - `-C "$(pwd)"`: Set working directory to current project
 - `--output-last-message`: Capture Codex's final response to a file
 
@@ -142,14 +142,14 @@ After Codex completes:
 
 ## Example Usage
 
-### Standard Review (medium effort, default)
+### Standard Review (high effort, default)
 **User says:** "I just finished implementing the user authentication feature, can you have codex review it?"
 
 **Claude Code will:**
 1. Run `git diff HEAD` to get all changes
 2. Ask for any additional context if needed
 3. Construct review prompt with the auth feature context
-4. Run `codex exec -m gpt-5.5 -s read-only -c model_reasoning_effort="medium" ...`
+4. Run `codex exec -m gpt-6.2-astra -s read-only -c model_reasoning_effort="high" ...`
 5. Present Codex's review feedback
 6. Offer to help implement suggested changes
 
